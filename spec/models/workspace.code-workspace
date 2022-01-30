@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../dig-into-rspec"
+		},
+		{
+			"path": "../../../StringCalculator-RspecProject"
+		}
+	],
+	"settings": {}
+}

@@ -20,13 +20,24 @@ RSpec.describe User, type: :model do
     expect(@user.errors[:email]).to include("can\'t be blank")
     end
 
-    # it 'should not create a User if their email is not unique' do
-    # @user1 = User.new(email: "sam@gmail.com", password: "ABCDEF", password_confirmation: "ABCDEF")
-    # @user1.save
-    # @user2 = User.new(email: "sam@gmail.com", password: "ABCDEF", password_confirmation: "ABCDEF")
-    # @user2.save
-    # expect(@user2.errors[:email]).to include("has already been taken")
-    # end
+    it "is not a Valid user if created with an email which exists(not case sensitive)" do
+      newUser1 = User.create(
+        name: 'Sarah',
+        email: 'test@test.com',
+        password:'1234567',
+        password_confirmation:'1234567'
+        )
+       
+        newUser2= User.create(
+          name: 'Ann',
+          email: 'TEST@TEST.COM',
+          password:'1234567',
+          password_confirmation:'1234567'
+          )
+    p newUser2
+    expect(newUser2).to_not be_valid
+    end
+
     it 'should not create a User if their passwords do not match' do
     @user = User.new( name: 'ABC', email: "sam@gmail.com", password: "ABCDEF", password_confirmation: "ABCDEFG")
     @user.valid?
@@ -70,6 +81,26 @@ RSpec.describe User, type: :model do
       @user.save!
       expect(User.authenticate_with_credentials("  SAMMY123@gmail.com   ", "ABCDEF")).to be_present
     end
+    it "authenticate a user with spaces in email" do
+      newUser = User.create(
+        name: 'Nicole',
+        email: 'test@test.com',
+        password:'1234567',
+        password_confirmation:'1234567'
+        )
+      user =  User.authenticate_with_credentials('  test@test.com  ','1234567')
+      expect(user).to_not be_nil
+    end   
+    it "authenticate a user with diffrerent case in email" do
+      newUser = User.create(
+        name: 'Nicole',
+        email: 'test@test.com',
+        password:'1234567',
+        password_confirmation:'1234567'
+        )
+      user =  User.authenticate_with_credentials('Test@tEst.com','1234567')
+      expect(user).to_not be_nil
+    end   
   end
 end
 
